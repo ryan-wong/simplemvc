@@ -9,19 +9,22 @@
  */
 class Core_Controller {
 
-    protected $_cache;
-    protected $_data;
-    protected $_query;
-    protected $_controller;
-    protected $_module;
     protected $_action;
+    protected $_cache;
+    protected $_controller;
+    protected $_data;
+    protected $_dontRender;
     protected $_extension;
+    protected $_layoutEnable;
+    protected $_layout;
+    protected $_module;
+    protected $_query;
     protected $_templateFile;
     protected $_templateType;
-    protected $_dontRender;
     protected $_view;
 
     public function __construct($module, $controller, $action, $query) {
+        $config = getConfig();
         $query = ($query) ? $query : array();
         $this->_cache = false;
         $this->_data = array();
@@ -34,6 +37,8 @@ class Core_Controller {
         $this->_dontRender = false;
         $this->_templateType = 'php';
         $this->_view = new Core_View();
+        $this->_layoutEnable = $config[ENV]['layout_enable'] == '1' ? true : false;
+        $this->_layout = "{$module}.php";
         if (!method_exists($this, $action . "Page")) {
             throw new Exception('Page Does not Exist.');
         }
@@ -105,9 +110,17 @@ class Core_Controller {
         $this->init();
         $action = $this->_action . "Page";
         $this->$action();
+        $view = $this->_view;
         if (!$this->_dontRender) {
-            $this->_view->getTemplateManagement()->templateSelection($this->_templateType, $this->_module, $this->_controller, $this->_action, $this->_cache);
-            $this->_view->getTemplateManagement()->render($this->_data);
+            if ($this->_layoutEnable) {
+                $view->getTemplateManagement()->templateSelection($this->_templateType, $this->_module, $this->_controller, $this->_action, $this->_cache);
+                $view->assignDataForTemplate($this->_data);
+                $layoutFile = ROOT . DS . $this->_module . DS . "layout" . DS . $this->_layout;
+                include $layoutFile;
+            } else {
+                $this->_view->getTemplateManagement()->templateSelection($this->_templateType, $this->_module, $this->_controller, $this->_action, $this->_cache);
+                $this->_view->getTemplateManagement()->render($this->_data);
+            }
         }
     }
 

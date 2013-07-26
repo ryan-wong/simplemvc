@@ -69,6 +69,14 @@ function autoLoadExceptions($classPath) {
 function getConfig() {
     $fileName = ROOT . DS . "public" . DS . "config" . DS . "configuration.ini";
     $ini_array = parse_ini_file($fileName, true);
+
+    if (!isset($ini_array[ENV]['layout_enable'])) {
+        $ini_array[ENV]['layout_enable'] = 0;
+    }
+    if (!isset($ini_array[ENV]['gear_namespace'])) {
+        $ini_array[ENV]['gear_namespace'] = array();
+    }
+
     return $ini_array;
 }
 
