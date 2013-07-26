@@ -26,8 +26,7 @@ class Core_Controller {
     public function __construct($module, $controller, $action, $query) {
         $config = getConfig();
         $query = ($query) ? $query : array();
-        $this->_cache = false;
-        $this->_data = array();
+        $this->_cache = false;        
         $this->_query = $query;
         $this->_module = $module;
         $this->_controller = $controller;
@@ -37,6 +36,7 @@ class Core_Controller {
         $this->_dontRender = false;
         $this->_templateType = 'php';
         $this->_view = new Core_View();
+        $this->_data = array('view' => $this->_view);
         $this->_layoutEnable = $config[ENV]['layout_enable'] == '1' ? true : false;
         $this->_layout = "{$module}.php";
         if (!method_exists($this, $action . "Page")) {
