@@ -3,8 +3,8 @@
 /**
  * @author Ryan Wong
  * @version 1.0
- * @package Library
- * @category Include
+ * @package Optional
+ * @category Gear
  * @copyright (c) 2013, Ryan Wong
  */
 class Gear_Cache {
