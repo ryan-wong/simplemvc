@@ -84,6 +84,74 @@ class Gear_ViewHelper {
         return 'No Country Code';
     }
 
+    public function encodeArrows($str) {
+        $str = str_replace(array('>', '<', '\\'), array('&gt;', '&lt;', '\\\\'), $str);
+        return $str;
+    }
+
+    public function escapeXSS($text) {
+        $never_allowed_str = array(
+            'document.cookie' => '[removed]',
+            'document.write' => '[removed]',
+            '.parentNode' => '[removed]',
+            '.innerHTML' => '[removed]',
+            'window.location' => '[removed]',
+            '-moz-binding' => '[removed]',
+            '<!--' => '&lt;!--',
+            '-->' => '--&gt;',
+            '<![CDATA[' => '&lt;![CDATA[',
+            '<comment>' => '&lt;comment&gt;'
+        );
+        $never_allowed_regex = array(
+            'javascript\s*:',
+            'expression\s*(\(|&\#40;)', // CSS and IE
+            'vbscript\s*:', // IE, surprise!
+            'Redirect\s+302',
+            "([\"'])?data\s*:[^\\1]*?base64[^\\1]*?,[^\\1]*?\\1?"
+        );
+
+
+        foreach ($never_allowed_str as $key => $value) {
+            $text = str_replace($key, $value, $text);
+        }
+        foreach ($never_allowed_regex as $regex) {
+            $text = preg_replace('#' . $regex . '#is', '[removed]', $text);
+        }
+        return $this->remove_invisible_characters($text);
+    }
+
+    public function remove_invisible_characters($str, $url_encoded = TRUE) {
+        $non_displayables = array();
+
+        // every control character except newline (dec 10)
+        // carriage return (dec 13), and horizontal tab (dec 09)
+
+        if ($url_encoded) {
+            $non_displayables[] = '/%0[0-8bcef]/'; // url encoded 00-08, 11, 12, 14, 15
+            $non_displayables[] = '/%1[0-9a-f]/'; // url encoded 16-31
+        }
+
+        $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
+
+        do {
+            $str = preg_replace($non_displayables, '', $str, -1, $count);
+        } while ($count);
+
+        return $str;
+    }
+
+    /**
+     * Force Download
+     * @param string $filename
+     * @param string $str
+     */
+    public function forceDownload($filename, $str) {
+        header("Content-type: application/force-download");
+        header("Content-Disposition: attachment; filename=$filename;size=" . strlen($str));
+        echo $str;
+        exit;
+    }
+
     /**
      * 
      * @param array $data
