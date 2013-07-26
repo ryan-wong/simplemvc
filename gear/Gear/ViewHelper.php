@@ -33,6 +33,32 @@ class Gear_ViewHelper {
     }
 
     /**
+     * 
+     * @param array $csvArray
+     * @param string $fileName
+     */
+    public function csv(array $csvArray, $fileName = 'test.csv') {
+        $csvStr = '';
+        foreach ($csvArray as $fields) {
+            $count = count($fields);
+            $i = 0;
+            foreach ($fields as $field) {
+                $csvStr .= $field;
+                if ($i < $count - 1) {
+                    $csvStr.= ',';
+                } else {
+                    $csvStr .= "\n";
+                }
+                $i++;
+            }
+        }
+        header("Content-type: application/force-download");
+        header("Content-Disposition: attachment; filename=$fileName.csv;size=" . strlen($csvStr));
+        echo $csvStr;
+        exit;
+    }
+
+    /**
      * get country by country code
      * @param string $countryCode
      * @return string
