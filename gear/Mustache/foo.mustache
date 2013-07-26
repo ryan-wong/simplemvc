@@ -1,0 +1,37 @@
+Hello {{planet}} is a variable<br/>
+
+{{{company}}} unescaped
+<br/>
+{{& company}} unescaped
+<br/>
+{{# person }} begins a "person" section while {{/ person }} ends it.
+<br/>
+Shown.
+{{# nothin }}
+  Never shown! if nothin = true show
+{{/ nothin }}
+<br/>
+{{# repo }}
+  <b>{{ name }}</b>
+{{/ repo }}
+<br/>
+{{# wrapped }}
+  {{ name }} is awesome.
+{{/ wrapped }}
+<br/>
+{{# embiggened }}
+  {{ name }} is awesome.
+{{/ embiggened }}
+<br/>
+non false  and not list
+{{# person? }}
+  Hi {{ name }}!
+{{/ person? }}
+<br/>
+regular array iteration no associative
+{{# colors }}
+ * {{ . }}
+{{/ colors }}
+<h1>Today{{! ignore me comment}}.</h1>
+{{> box }}. im a partial
+{{foo.bar.baz}} dot notation

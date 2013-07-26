@@ -1,0 +1,35 @@
+windows
+<VirtualHost *:80>
+    ServerName smvc.com
+    DocumentRoot "C:/xampp/htdocs/simplemvc/public/"
+    SetEnv APPLICATION_ENV "local"      
+    
+    <Directory "C:/xampp/htdocs/simplemvc/public/">        
+        DirectoryIndex index.php
+        Options Indexes FollowSymLinks ExecCGI Includes
+        AllowOverride All        
+        Order allow,deny
+        Allow from all
+        
+    </Directory>
+</VirtualHost>
+fedora 17
+<VirtualHost *:80>
+        ServerName      simple.com
+        DocumentRoot    /home/ryanwong/simple/public
+        
+        # development, testing, production
+        SetEnv APPLICATION_ENV development
+        # key of server password
+        # SetEnv PASSWD_KEY key
+        # php_value session.cookie_domain 
+        # turn rewriting on
+        RewriteEngine on
+        RewriteRule ^.*\.(js|ico|gif|jpg|png|css|html)$ - [NC,L]
+        # if using inside .htaccess or directory tag, removed %{DOCUMENT_ROOT}
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} -f [OR]
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} -l [OR]
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} -d
+        RewriteRule ^.*$ - [NC,L]
+        RewriteRule ^.*$ /index.php [NC,L]
+</VirtualHost>
