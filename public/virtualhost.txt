@@ -24,6 +24,9 @@ fedora 17
         # SetEnv PASSWD_KEY key
         # php_value session.cookie_domain 
         # turn rewriting on
+        <Directory "/home/ryanwong/simplemvc/public/uploads">
+	Allow from all
+        </Directory>
         RewriteEngine on
         RewriteRule ^.*\.(js|ico|gif|jpg|png|css|html)$ - [NC,L]
         # if using inside .htaccess or directory tag, removed %{DOCUMENT_ROOT}

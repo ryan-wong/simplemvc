@@ -1,0 +1,2 @@
+In this folder users can access any file in here by refering to:
+simplemvc.com/upload/allowupload.txt
