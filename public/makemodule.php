@@ -21,6 +21,7 @@ if (!empty($_POST)) {
     $baseUrl = ROOT . DS . $moduleName . DS;
     $directory = array(
         "$baseUrl",
+        "{$baseUrl}layout",
         "{$baseUrl}view");
     foreach ($_POST as $key => $value) {
         if ($key == "form" && $value == 1) {
