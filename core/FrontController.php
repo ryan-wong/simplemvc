@@ -57,7 +57,7 @@ class Core_FrontController {
             case 3:// action
                 $module = strtolower($urlParts[0]);
                 $controller = strtolower($urlParts[1]);
-                $action = strtolower($urlParts[2]);
+                $action = $urlParts[2];
                 $query = (!empty($urlArray['query'])) ? $urlArray['query'] : '';
                 $this->delegateToController($module, $controller, $action, $query);
                 break;
