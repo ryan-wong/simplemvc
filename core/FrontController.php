@@ -11,6 +11,21 @@ class Core_FrontController {
 
     private static $_instance;
 
+    private function delegateToController($module, $controller, $action, $query) {
+        if ($this->notAllowModule($module)) {
+            $this->invalidUrl();
+        }
+        try {
+            $controllerName = ucfirst($module) . '_' . ucfirst($controller);
+            $dispatch = new $controllerName($module, $controller, $action, $this->parseQuery($query));
+        } catch (Exception $ex) {
+            error_log($ex->getMessage() . "\n");
+            error_log($ex->getTraceAsString() . "\n");
+            $this->invalidUrl();
+        }
+        $dispatch->render();
+    }
+
     /**
      * 
      * @return Core_FrontController
@@ -67,6 +82,18 @@ class Core_FrontController {
         exit;
     }
 
+    private function notAllowModule($module) {
+        $aclPath = ROOT . DS . $module . DS . 'Acl.php';
+        if (!file_exists($aclPath)) {
+            return false;
+        } else {
+            $module = ucfirst($module);
+            $acl = "{$module}_Acl";
+            $aclObject = new $acl();
+            return !$aclObject->allow();
+        }
+    }
+
     private function parseQuery($query) {
         if (!$query) {
             return '';
@@ -78,19 +105,6 @@ class Core_FrontController {
             $param[$pair[0]] = $pair[1];
         }
         return $param;
-    }
-
-    public function delegateToController($module, $controller, $action, $query) {
-        try {
-            $controllerName = ucfirst($module) . '_' . ucfirst($controller);
-            $dispatch = new $controllerName($module, $controller, $action, $this->parseQuery($query));
-        } catch (Exception $ex) {
-            error_log($ex->getMessage() . "\n");
-            error_log($ex->getTraceAsString() . "\n");
-            $this->invalidUrl();
-            exit;
-        }
-        $dispatch->render();
     }
 
 }
