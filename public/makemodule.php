@@ -60,10 +60,10 @@ function renderAcl($module) {
     $module = ucfirst($module);
     $aclFile = <<<ACL
 <?php
-    class {$module}_Config_Acl extends Core_Acl{
+    class {$module}_Acl extends Core_Acl{
         }
 ACL;
-    writeToFile(ROOT . DS . lcfirst($module) . DS . "config" . DS . "acl.php", $aclFile);
+    writeToFile(ROOT . DS . lcfirst($module) . DS . "Acl.php", $aclFile);
 }
 ?>
 <form method="post" id="module" name="module">
