@@ -21,8 +21,7 @@ if (!empty($_POST)) {
     $baseUrl = ROOT . DS . $moduleName . DS;
     $directory = array(
         "$baseUrl",
-        "{$baseUrl}view",
-        "{$baseUrl}config");
+        "{$baseUrl}view");
     foreach ($_POST as $key => $value) {
         if ($key == "form" && $value == 1) {
             $directory[] = "{$baseUrl}form";
@@ -41,19 +40,7 @@ if (!empty($_POST)) {
         }
     }
     makeDirectory($directory);
-    renderConfiguration($moduleName);
     renderAcl($moduleName);
-}
-
-function renderConfiguration($module) {
-    $configurationFile = <<<CONFIG
-[development]
-    
-[test]
-
-[production]
-CONFIG;
-    writeToFile(ROOT . DS . $module . DS . "config" . DS . "configuration.ini", $configurationFile);
 }
 
 function renderAcl($module) {
