@@ -21,6 +21,9 @@ class Core_SessionObject {
             throw new Exception('Expected Session Name');
         }
         $this->_namespace = $namespace;
+        if (!isset($_SESSION[$namespace])) {
+            $_SESSION[$namespace] = array();
+        }
     }
 
     /**
@@ -59,6 +62,7 @@ class Core_SessionObject {
             $_SESSION[$this->_namespace][$name] = $value;
         }
     }
+
     /**
      * 
      * @param string $name
@@ -68,14 +72,16 @@ class Core_SessionObject {
             unset($_SESSION[$this->_namespace][$name]);
         }
     }
+
     /**
      * 
      * @param string $name
      * @return boolean
      */
     public function __isset($name) {
-        return array_key_exists($name, $_SESSION[$this->_namespace][$name]);
+        return array_key_exists($name, $_SESSION[$this->_namespace]);
     }
+
     /**
      * Get all value stored in Session NameSpace
      * @return array
@@ -83,6 +89,7 @@ class Core_SessionObject {
     public function getAll() {
         return $_SESSION[$this->_namespace];
     }
+
     /**
      * Get whole Session array.
      * @return array
@@ -90,12 +97,17 @@ class Core_SessionObject {
     public function getSession() {
         return $_SESSION;
     }
+
     /**
      * Lock a Session value so no one can set it
      * @param string $name
      */
     public function lock($name) {
         $_SESSION['lock'][] = $name;
+    }
+
+    public function destroy() {
+        unset($_SESSION[$this->_namespace]);
     }
 
 }
