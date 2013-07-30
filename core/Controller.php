@@ -140,6 +140,10 @@ class Core_Controller {
         $this->_templateType = $type;
     }
 
+    public function disableLayout(){
+        $this->_layoutEnable = false;
+    }
+
 }
 
 ?>
