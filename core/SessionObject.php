@@ -34,7 +34,8 @@ class Core_SessionObject {
             throw new Exception("The '$name' key must be a non-empty string");
         }
 
-        if (isset($_SESSION[$this->_namespace][$name])) {
+        if (isset($_SESSION[$this->_namespace]) &&
+                isset($_SESSION[$this->_namespace][$name])) {
             return $_SESSION[$this->_namespace][$name];
         } else {
             return null;
@@ -59,30 +60,42 @@ class Core_SessionObject {
             $_SESSION[$this->_namespace][$name] = $value;
         }
     }
+
     /**
      * 
      * @param string $name
      */
     public function __unset($name) {
-        if (isset($_SESSION[$this->_namespace][$name])) {
+        if (isset($_SESSION[$this->_namespace]) &&
+                isset($_SESSION[$this->_namespace][$name])) {
             unset($_SESSION[$this->_namespace][$name]);
         }
     }
+
     /**
      * 
      * @param string $name
      * @return boolean
      */
     public function __isset($name) {
-        return array_key_exists($name, $_SESSION[$this->_namespace][$name]);
+        if (isset($_SESSION[$this->_namespace]) &&
+                array_key_exists($name, $_SESSION[$this->_namespace][$name])) {
+            return true;
+        }
+        return false;
     }
+
     /**
      * Get all value stored in Session NameSpace
      * @return array
      */
     public function getAll() {
-        return $_SESSION[$this->_namespace];
+        if (isset($_SESSION[$this->_namespace])) {
+            return $_SESSION[$this->_namespace];
+        }
+        return array();
     }
+
     /**
      * Get whole Session array.
      * @return array
@@ -90,6 +103,7 @@ class Core_SessionObject {
     public function getSession() {
         return $_SESSION;
     }
+
     /**
      * Lock a Session value so no one can set it
      * @param string $name
