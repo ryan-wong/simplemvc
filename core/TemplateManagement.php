@@ -49,11 +49,12 @@ class Core_TemplateManagement {
                 foreach ($data as $key => $value) {
                     $this->_templateEngine->assign($key, $value);
                 }
-                if ($this->_cache) {
+                if ($this->_cache) {                    
                     $cache = $this->_templateEngine->cache($this->_templateFile, $this->_cache);
                     echo $cache;
+                } else {
+                    $this->_templateEngine->draw($this->_templateFile);
                 }
-                $this->_templateEngine->draw($this->_templateFile);
                 break;
             case 'php':
                 extract($data);

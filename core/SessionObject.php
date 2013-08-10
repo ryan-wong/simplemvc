@@ -21,6 +21,9 @@ class Core_SessionObject {
             throw new Exception('Expected Session Name');
         }
         $this->_namespace = $namespace;
+        if (!isset($_SESSION[$namespace])) {
+            $_SESSION[$namespace] = array();
+        }
     }
 
     /**
@@ -110,6 +113,10 @@ class Core_SessionObject {
      */
     public function lock($name) {
         $_SESSION['lock'][] = $name;
+    }
+
+    public function destroy() {
+        unset($_SESSION[$this->_namespace]);
     }
 
 }
