@@ -82,7 +82,7 @@ class Core_SessionObject {
      */
     public function __isset($name) {
         if (isset($_SESSION[$this->_namespace]) &&
-                array_key_exists($name, $_SESSION[$this->_namespace][$name])) {
+                array_key_exists($name, $_SESSION[$this->_namespace])) {
             return true;
         }
         return false;
